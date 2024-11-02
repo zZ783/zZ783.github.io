@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zz783.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么叫规范？在C语言中不遵守编译器的规定，编译器在编译时就会报错，这个规定叫作规则。但是有一种规定，它是一种人为的、约定成俗的，即使不按照那种规定也不会出错，这种规定就叫作规范。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言代码规范（编程规范）">
+<meta property="og:url" content="https://zz783.github.io/2024/10/20/C/index.html">
+<meta property="og:site_name" content="入门">
+<meta property="og:description" content="什么叫规范？在C语言中不遵守编译器的规定，编译器在编译时就会报错，这个规定叫作规则。但是有一种规定，它是一种人为的、约定成俗的，即使不按照那种规定也不会出错，这种规定就叫作规范。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-10-20T05:34:55.000Z">
+<meta property="article:modified_time" content="2024-10-23T02:53:32.785Z">
+<meta property="article:author" content="小白">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://zz783.github.io/2024/10/20/C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C语言代码规范（编程规范） | 入门</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">入门</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">细节 态度</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zz783.github.io/2024/10/20/C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="小白">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="入门">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C语言代码规范（编程规范）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-10-20 13:34:55" itemprop="dateCreated datePublished" datetime="2024-10-20T13:34:55+08:00">2024-10-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-23 10:53:32" itemprop="dateModified" datetime="2024-10-23T10:53:32+08:00">2024-10-23</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>什么叫规范？在C语言中不遵守编译器的规定，编译器在编译时就会报错，这个规定叫作规则。但是有一种规定，它是一种人为的、约定成俗的，即使不按照那种规定也不会出错，这种规定就叫作规范。</p>
+<span id="more"></span>
+<h2 id="代码如何写才能规范"><a href="#代码如何写才能规范" class="headerlink" title="代码如何写才能规范"></a>代码如何写才能规范</h2><p>那么代码如何写才能写得很规范呢？代码的规范化不是说看完本节内容后就能实现的。它里面细节很多，而且需要不停地写代码练习，不停地领悟，慢慢地才能掌握的一种编程习惯。所以大家不要想着一下子就能把代码规范化的所有知识全部掌握，也不要想着一下子就能把代码写规范，这是不太可能的。</p>
+<p>有很多知识，比如为什么代码要这样写，为什么不能那样写，作为一个初学者你是很难弄明白的。有很多规范是为了在程序代码量很大的时候，便于自己阅读，也便于别人阅读。</p>
+<p>所以刚开始的时候有很多规范你不知道为什么要那样规定，你就单纯地模仿就行了。等将来敲代码敲得时间长了，你就会感觉到那样写是很有好处的。</p>
+<h2 id="代码规范化的好处"><a href="#代码规范化的好处" class="headerlink" title="代码规范化的好处"></a>代码规范化的好处</h2><p>代码规范化的第一个好处就是看着很整齐、很舒服。假如你现在用不规范的方式写了一万行代码，现在能看得懂，但等过了三个月你再回头看时就很吃力了，更不要说给别人看了。所以代码要写规范，比如加注释就是代码规范化的一个思想。</p>
+<p>在一般情况下，根据软件工程的思想，我们的注释要占整个文档的20%以上。所以注释要写得很详细，而且格式要写得很规范。</p>
+<p>第二个好处是，把代码写规范则程序不容易出错。如果按照不规范的格式输入代码的话，很容易出错。而代码写规范的话即使出错了查错也会很方便。格式虽然不会影响程序的功能，但会影响可读性。程序的格式追求清晰、美观，是程序风格的重要构成元素。</p>
+<h2 id="代码规范化的七大原则"><a href="#代码规范化的七大原则" class="headerlink" title="代码规范化的七大原则"></a>代码规范化的七大原则</h2><p>代码规范化基本上有七大原则，体现在空行、空格、成对书写、缩进、对齐、代码行、注释七方面的书写规范上。</p>
+<h3 id="1-空行"><a href="#1-空行" class="headerlink" title="1) 空行"></a>1) 空行</h3><p>空行起着分隔程序段落的作用。空行得体将使程序的布局更加清晰。空行不会浪费内存，虽然打印含有空行的程序会多消耗一些纸张，但是值得。</p>
+<p>规则一：定义变量后要空行。尽可能在定义变量的同时初始化该变量，即遵循就近原则。如果变量的引用和定义相隔比较远，那么变量的初始化就很容易被忘记。若引用了未被初始化的变量，就会导致程序出错。</p>
+<p>规则二：每个函数定义结束之后都要加空行。</p>
+<p>总规则：两个相对独立的程序块、变量说明之后必须要加空行。比如上面几行代码完成的是一个功能，下面几行代码完成的是另一个功能，那么它们中间就要加空行。这样看起来更清晰。</p>
+<h3 id="2-空格"><a href="#2-空格" class="headerlink" title="2) 空格"></a>2) 空格</h3><p>规则一：关键字之后要留空格。像 const、case 等关键字之后至少要留一个空格，否则无法辨析关键字。像 if、for、while 等关键字之后应留一个空格再跟左括号(，以突出关键字。</p>
+<p>规则二：函数名之后不要留空格，应紧跟左括号(，以与关键字区别。</p>
+<p>规则三：(向后紧跟；)、,、;这三个向前紧跟；紧跟处不留空格。</p>
+<p>规则四：,之后要留空格。如果;不是一行的结束符号，其后要留空格。</p>
+<p>规则五：赋值运算符、关系运算符、算术运算符、逻辑运算符、位运算符，如 &#x3D;、&#x3D;&#x3D;、！&#x3D;、+&#x3D;、－&#x3D;、*&#x3D;、&#x2F;&#x3D;、%&#x3D;、&gt;&gt;&#x3D;、&lt;&lt;&#x3D;、&amp;&#x3D;、^&#x3D;、|&#x3D;、&gt;、&lt;&#x3D;、&gt;、&gt;&#x3D;、+、－、*、&#x2F;、%、&amp;、|、&amp;&amp;、||、&lt;&lt;、&gt;&gt;、^ 等双目运算符的前后应当加空格。</p>
+<p>注意，运算符“%”是求余运算符，与 printf 中 %d 的“%”不同，所以 %d 中的“%”前后不用加空格。</p>
+<p>规则六：单目运算符 !、~、++、－－、－、*、&amp; 等前后不加空格。</p>
+<p>注意：</p>
+<ul>
+<li>这里的“－”和规则五里面的“－”不同。这里的“－”是负号运算符，规则五里面的“－”是减法运算符。</li>
+<li>这里的“<em>”和规则五里面的“</em>”也不同。这里的“<em>”是指针运算符，规则五里面的“</em>”是乘法运算符。</li>
+<li>这里的“&amp;”和规则五里面的“&amp;”也不同。这里的“&amp;”是取地址运算符，规则五里面的“&amp;”是按位与运算符。</li>
+</ul>
+<p>总之，规则六中的是单目运算符，而规则五中的是双目运算符，它们是不一样的。</p>
+<p>规则七：像数组符号[]、结构体成员运算符.、指向结构体成员运算符-&gt;，这类操作符前后不加空格。</p>
+<p>规则八：对于表达式比较长的 for 语句和 if 语句，为了紧凑起见，可以适当地去掉一些空格。但 for 和 if 后面紧跟的空格不可以删，其后面的语句可以根据语句的长度适当地去掉一些空格。例如：<br>for (i&#x3D;0; i&lt;10; i++)</p>
+<p>for 和分号后面保留空格就可以了，&#x3D;和&lt;前后的空格可去掉。</p>
+<h3 id="3-成对书写"><a href="#3-成对书写" class="headerlink" title="3) 成对书写"></a>3) 成对书写</h3><p>成对的符号一定要成对书写，如 ()、{}。不要写完左括号然后写内容最后再补右括号，这样很容易漏掉右括号，尤其是写嵌套程序的时候。</p>
+<h3 id="4-缩进"><a href="#4-缩进" class="headerlink" title="4) 缩进"></a>4) 缩进</h3><p>缩进是通过键盘上的 Tab 键实现的，缩进可以使程序更有层次感。原则是：如果地位相等，则不需要缩进；如果属于某一个代码的内部代码就需要缩进。</p>
+<h3 id="5-对齐"><a href="#5-对齐" class="headerlink" title="5) 对齐"></a>5) 对齐</h3><p>对齐主要是针对大括号{}说的：</p>
+<p>规则一：{和}分别都要独占一行。互为一对的{和}要位于同一列，并且与引用它们的语句左对齐。</p>
+<p>规则二：{}之内的代码要向内缩进一个 Tab，且同一地位的要左对齐，地位不同的继续缩进。</p>
+<p>还有需要注意的是，很多编程软件是会“自动对齐”的，比如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (…)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>写完 if 那一行后，按回车，此时光标在括号的右边，而此 if 下的大括号要写在与 if 左对齐的正下方，通常我们是按一下 Backspace 键使光标停在与 if 左对齐的正下方。但事实上我们不需要这样做，我们直接输入大括号即可，系统会自动对齐到与 if 左对齐的正下方。再接着看：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (…)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span> (…)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>写完 while 那一行后，按回车，此时光标不是停在与 while 左对齐的正下方，同样，我们不需要按 Backspace，直接输入大括号即可，系统会自动对齐到与 while 左对齐的正下方的。</p>
+<p>此外编程软件还有“对齐、缩进修正”功能。就是按 Ctrl+A 全选，然后按 Alt+F8，这时程序中所有成对的大括号都会自动对齐，未缩进的也会自动缩进。不管是在编程过程中，还是在编写结束完之后，都可以使用这个技巧。但如果完全按照规范写，那根本就不需要这个技巧，所以，这只是一个辅助功能。</p>
+<h3 id="6-代码行"><a href="#6-代码行" class="headerlink" title="6) 代码行"></a>6) 代码行</h3><p>规则一：一行代码只做一件事情，如只定义一个变量，或只写一条语句。这样的代码容易阅读，并且便于写注释。</p>
+<p>规则二：if、else、for、while、do 等语句自占一行，执行语句不得紧跟其后。此外，非常重要的一点是，不论执行语句有多少行，就算只有一行也要加{}，并且遵循对齐的原则，这样可以防止书写失误。</p>
+<h3 id="7-注释"><a href="#7-注释" class="headerlink" title="7) 注释"></a>7) 注释</h3><p>C语言中一行注释一般采用&#x2F;&#x2F;…，多行注释必须采用&#x2F;<em>…</em>&#x2F;。注释通常用于重要的代码行或段落提示。在一般情况下，源程序有效注释量必须在 20% 以上。虽然注释有助于理解代码，但注意不可过多地使用注释。</p>
+<p>规则一：注释是对代码的“提示”，而不是文档。程序中的注释不可喧宾夺主，注释太多会让人眼花缭乱。</p>
+<p>规则二：如果代码本来就是清楚的，则不必加注释。例如：<br>i++;  &#x2F;&#x2F;i加1</p>
+<p>这个就是多余的注释。</p>
+<p>规则三：边写代码边注释，修改代码的同时要修改相应的注释，以保证注释与代码的一致性，不再有用的注释要删除。</p>
+<p>规则四：当代码比较长，特别是有多重嵌套的时候，应当在段落的结束处加注释，这样便于阅读。</p>
+<p>规则五：每一条宏定义的右边必须要有注释，说明其作用。<br>实际案例<br>下面我们给出一段求一元二次方程的代码，让大家实际感受一下。虽然这个程序不包含所有的规范，但一些包含的规范我们可以对照着看看。</p>
+<p>以下程序的功能是把任何一个一元二次方程 ax2+bx+c&#x3D;0 的解给求出来。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># <span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="keyword">include</span> <span class="string">&lt;math.h&gt;</span> <span class="comment">/*因为要用到求平方函数sqrt()，所以要包含头文件 math.h*/</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//把三个系数保存到计算机中</span></span><br><span class="line">    <span class="type">int</span> a = <span class="number">1</span>;  <span class="comment">// “=”不表示相等，而是表示赋值</span></span><br><span class="line">    <span class="type">int</span> b = <span class="number">2</span>;</span><br><span class="line">    <span class="type">int</span> c = <span class="number">1</span>;</span><br><span class="line">    <span class="type">double</span> delta;   <span class="comment">//delta存放的是b*b - 4*a*c的值</span></span><br><span class="line">    <span class="type">double</span> x1, x2;  <span class="comment">//分别用于存放一元二次方程的两个解</span></span><br><span class="line">    delta = b*b - <span class="number">4</span>*a*c;</span><br><span class="line">    <span class="keyword">if</span> (delta &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        x1 = (-b + <span class="built_in">sqrt</span>(delta)) / (<span class="number">2</span>*a);</span><br><span class="line">        x2 = (-b - <span class="built_in">sqrt</span>(delta)) / (<span class="number">2</span>*a);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;该一元二次方程有两个解，x1 = %f, x2 = %f\n&quot;</span>, x1, x2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">0</span> == delta)</span><br><span class="line">    &#123;</span><br><span class="line">        x1 = (-b) / (<span class="number">2</span>*a);</span><br><span class="line">        x2 = x1;  <span class="comment">//左边值赋给右边</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;该一元二次方程有一个唯一解，x1 = x2 = %f\n&quot;</span>, x1);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;无解\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br>该一元二次方程有一个唯一解，x1 &#x3D; x2 &#x3D; -1.000000</p>
+<p>大家不用关心程序的逻辑和思路，只关注代码规范即可。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>单纯地读完一遍肯定没什么感觉，没关系，要想把代码写规范不是一朝一夕的事，这应该是一种习惯，需要不停地敲、不停的积累。刚开始的时候多模仿，照着规范写就行了，以后在写代码的时候，情不自禁地就会按规范的方式书写了。</p>
+
+    </div>
+    
+    <div>
+      
+          <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+        </div>
+    
+</div>
+      
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/17/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/23/error/" rel="next" title="Error">
+      Error <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%A6%82%E4%BD%95%E5%86%99%E6%89%8D%E8%83%BD%E8%A7%84%E8%8C%83"><span class="nav-number">1.</span> <span class="nav-text">代码如何写才能规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E5%8C%96%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">2.</span> <span class="nav-text">代码规范化的好处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E5%8C%96%E7%9A%84%E4%B8%83%E5%A4%A7%E5%8E%9F%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">代码规范化的七大原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%A9%BA%E8%A1%8C"><span class="nav-number">3.1.</span> <span class="nav-text">1) 空行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%A9%BA%E6%A0%BC"><span class="nav-number">3.2.</span> <span class="nav-text">2) 空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%88%90%E5%AF%B9%E4%B9%A6%E5%86%99"><span class="nav-number">3.3.</span> <span class="nav-text">3) 成对书写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%BC%A9%E8%BF%9B"><span class="nav-number">3.4.</span> <span class="nav-text">4) 缩进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%AF%B9%E9%BD%90"><span class="nav-number">3.5.</span> <span class="nav-text">5) 对齐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E4%BB%A3%E7%A0%81%E8%A1%8C"><span class="nav-number">3.6.</span> <span class="nav-text">6) 代码行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E6%B3%A8%E9%87%8A"><span class="nav-number">3.7.</span> <span class="nav-text">7) 注释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">小白</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zZ783/zZ783.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zZ783&#x2F;zZ783.github.io" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://sharedchat.fun/" title="chatgpt → https:&#x2F;&#x2F;sharedchat.fun&#x2F;" rel="noopener" target="_blank"><i class="fa custom chatgpt fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.bilibili.com/" title="bilibili → https:&#x2F;&#x2F;www.bilibili.com&#x2F;" rel="noopener" target="_blank"><i class="fa custom bilibili fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.freeconvert.com/zh" title="freeconvert → https:&#x2F;&#x2F;www.freeconvert.com&#x2F;zh" rel="noopener" target="_blank"><i class="fa custom freeconvert fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://docsmall.com/" title="docsmall → https:&#x2F;&#x2F;docsmall.com&#x2F;" rel="noopener" target="_blank"><i class="fa custom docsmall fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gezhe.com/ppt/" title="gezhe → https:&#x2F;&#x2F;gezhe.com&#x2F;ppt&#x2F;" rel="noopener" target="_blank"><i class="fa custom gezhe fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小白</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">5k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">4 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
